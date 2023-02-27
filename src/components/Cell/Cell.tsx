@@ -14,7 +14,7 @@ export const Cell = ({ cell, game, board }: Props) => {
     () => ({
       accept: "piece",
       canDrop: (object) => {
-        return true
+        return game.canMovePiece(object.id, cell.id, object.piece!)
       },
       drop: (object: TCell) => {
         return game.movePiece(object.id, cell.id, object.piece!)

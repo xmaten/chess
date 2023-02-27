@@ -5,7 +5,12 @@ export type PositionObserver = ((position: any) => void) | null
 
 export class Game {
   private board = initialBoard
+  private allCells: TCell[] = []
   private observers: PositionObserver[] = []
+
+  constructor() {
+    this.flattenBoard()
+  }
 
   get boardState(): TCell[][] {
     return this.board
@@ -47,6 +52,7 @@ export class Game {
 
     this.board = newBoard
 
+    this.flattenBoard()
     this.emitChange()
   }
 
@@ -59,8 +65,49 @@ export class Game {
   }
 
   canMoveKnight(from: string, to: string, piece: PieceType) {
-    const [color, figure] = piece.split("-")
+    const [color] = piece.split("-")
 
-    return true
+    const targetCell = this.getTargetCell(to)
+
+    if (!targetCell) {
+      return false
+    }
+
+    if (
+      this.isTargetKing(targetCell) ||
+      this.isTargetSameColor(targetCell, color)
+    ) {
+      return false
+    }
+
+    const fromX = Number(from.split("-")[0])
+    const fromY = Number(from.split("-")[1])
+
+    const toX = Number(to.split("-")[0])
+    const toY = Number(to.split("-")[1])
+
+    const dx = toX - fromX
+    const dy = toY - fromY
+
+    return (
+      (Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
+      (Math.abs(dx) === 1 && Math.abs(dy) === 2)
+    )
+  }
+
+  flattenBoard() {
+    this.allCells = this.board.flat()
+  }
+
+  isTargetKing(targetCell: TCell) {
+    return targetCell.piece?.includes("king")
+  }
+
+  isTargetSameColor(targetCell: TCell, fromColor: string) {
+    return targetCell.piece?.includes(fromColor)
+  }
+
+  getTargetCell(to: string) {
+    return this.allCells.find((cell) => cell.id === to)
   }
 }
