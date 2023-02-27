@@ -1,9 +1,19 @@
 import { Cell } from "@/components/Cell/Cell"
-import { initialBoard } from "@/utils/initialBoard"
 import { YAxis } from "@/components/YAxis/YAxis"
 import { XAxis } from "@/components/XAxis/XAxis"
+import { Game } from "@/controllers/Game"
+import { useEffect, useState } from "react"
+import { TCell } from "@/types/Cell"
 
-export const Board = () => {
+type Props = {
+  game: Game
+}
+
+export const Board = ({ game }: Props) => {
+  const [board, setBoard] = useState<TCell[][]>(game.boardState)
+
+  useEffect(() => game.observe(setBoard))
+
   return (
     <div style={{ display: "flex" }}>
       <YAxis />
@@ -15,15 +25,14 @@ export const Board = () => {
             gridTemplateColumns: "repeat(8, 85px)",
             border: "2px solid gray"
           }}>
-          {initialBoard.map((row, index) => (
+          {board.map((row, index) => (
             <div key={index}>
               {row.map((cell) => (
-                <Cell key={cell.id} cell={cell} />
+                <Cell key={cell.id} cell={cell} game={game} board={board} />
               ))}
             </div>
           ))}
         </div>
-
         <XAxis />
       </div>
     </div>

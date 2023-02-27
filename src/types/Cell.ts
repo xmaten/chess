@@ -1,5 +1,39 @@
 export type TCell = {
   id: string
   color: "light" | "dark"
-  figure: string | null
+  piece: PieceType | null
 }
+
+export type PieceType =
+  | "dark-rook"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-rook"
+  | "dark-knight"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-knight"
+  | "dark-bishop"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-bishop"
+  | "dark-queen"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-queen"
+  | "dark-king"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-king"
+  | "dark-bishop"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-bishop"
+  | "dark-knight"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-knight"
+  | "dark-rook"
+  | "dark-pawn"
+  | "light-pawn"
+  | "light-rook"

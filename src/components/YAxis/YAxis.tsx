@@ -1,5 +1,5 @@
 export const YAxis = () => {
-  const items = Array.from(Array(8).keys())
+  const items = Array.from(Array(8).keys()).reverse()
 
   return (
     <div
