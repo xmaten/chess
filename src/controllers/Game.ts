@@ -96,27 +96,63 @@ export class Game {
     const toXNumber = Number(to.split("-")[0])
     const toYNumber = Number(to.split("-")[1])
 
-    const nextCell = this.getCell(`${pawnXNumber}-${pawnYNumber + 1}`)
+    const nextCell =
+      piece === "light-pawn"
+        ? this.getCell(`${pawnXNumber}-${pawnYNumber + 1}`)
+        : this.getCell(`${pawnXNumber}-${pawnYNumber - 1}`)
+
     if (!fromCell?.wasAlreadyMoved) {
-      const nextCell2 = this.getCell(`${pawnXNumber}-${pawnYNumber + 2}`)
+      const nextCell2 =
+        piece === "light-pawn"
+          ? this.getCell(`${pawnXNumber}-${pawnYNumber + 2}`)
+          : this.getCell(`${pawnXNumber}-${pawnYNumber - 2}`)
+
+      if (
+        !nextCell?.piece &&
+        (piece === "light-pawn"
+          ? toYNumber === pawnYNumber + 1 && toXNumber === pawnXNumber
+          : toYNumber === pawnYNumber - 1 && toXNumber === pawnXNumber)
+      ) {
+        return true
+      }
+
       if (
         !nextCell?.piece &&
         !nextCell2?.piece &&
-        toYNumber === pawnYNumber + 2
+        (piece === "light-pawn"
+          ? toYNumber === pawnYNumber + 2 && toXNumber === pawnXNumber
+          : toYNumber === pawnYNumber - 2 && toXNumber === pawnXNumber)
       ) {
         return true
       }
     } else {
-      if (!nextCell?.piece && toYNumber === pawnYNumber + 1) {
+      if (
+        !nextCell?.piece &&
+        (piece === "light-pawn"
+          ? toYNumber === pawnYNumber + 1 && toXNumber === pawnXNumber
+          : toYNumber === pawnYNumber - 1 && toXNumber === pawnXNumber)
+      ) {
         return true
       }
     }
 
     if (targetCell.piece) {
-      const topLeftCell = this.getCell(`${pawnXNumber - 1}-${pawnYNumber + 1}`)
-      const topRightCell = this.getCell(`${pawnXNumber + 1}-${pawnYNumber + 1}`)
+      const topLeftCoords =
+        piece === "light-pawn"
+          ? `${pawnXNumber - 1}-${pawnYNumber + 1}`
+          : `${pawnXNumber - 1}-${pawnYNumber - 1}`
+      const topRightCoords =
+        piece === "light-pawn"
+          ? `${pawnXNumber + 1}-${pawnYNumber + 1}`
+          : `${pawnXNumber + 1}-${pawnYNumber - 1}`
 
-      if (topLeftCell || topRightCell) {
+      const topLeftCell = this.getCell(topLeftCoords)
+      const topRightCell = this.getCell(topRightCoords)
+
+      if (
+        (topLeftCell && `${toXNumber}-${toYNumber}` === topLeftCell.id) ||
+        (topRightCell && `${toXNumber}-${toYNumber}` === topRightCell.id)
+      ) {
         return true
       }
     }
