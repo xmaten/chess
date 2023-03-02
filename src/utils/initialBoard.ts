@@ -46,7 +46,7 @@ export const initialBoard: TCell[][] = [
     { id: "5-7", color: "dark", piece: "dark-pawn" },
     { id: "5-6", color: "light", piece: null },
     { id: "5-5", color: "dark", piece: null },
-    { id: "5-4", color: "light", piece: null },
+    { id: "5-4", color: "light", piece: "light-rook" },
     { id: "5-3", color: "dark", piece: null },
     { id: "5-2", color: "light", piece: "light-pawn" },
     { id: "5-1", color: "dark", piece: "light-king" }
@@ -79,6 +79,6 @@ export const initialBoard: TCell[][] = [
     { id: "8-4", color: "dark", piece: null },
     { id: "8-3", color: "light", piece: null },
     { id: "8-2", color: "dark", piece: "light-pawn" },
-    { id: "8-1", color: "light", piece: "light-rook" }
+    { id: "8-1", color: "light", piece: null }
   ]
 ]

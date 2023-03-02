@@ -61,7 +61,108 @@ export class Game {
       return this.canMoveKnight(from, to, piece)
     }
 
+    if (piece === "dark-rook" || piece === "light-rook") {
+      return this.canMoveRook(from, to, piece)
+    }
+
     return true
+  }
+
+  canMoveRook(from: string, to: string, piece: PieceType) {
+    const [color] = piece.split("-")
+
+    const targetCell = this.getTargetCell(to)
+
+    if (!targetCell) {
+      return false
+    }
+
+    if (
+      this.isTargetKing(targetCell) ||
+      this.isTargetSameColor(targetCell, color)
+    ) {
+      return false
+    }
+
+    const rookXNumber = Number(from.split("-")[0])
+    const rookYNumber = Number(from.split("-")[1])
+    // console.log("here", from)
+
+    let isHorizontalMove = false
+    let isVerticalMove = false
+
+    const toXNumber = Number(to.split("-")[0])
+    const toYNumber = Number(to.split("-")[1])
+
+    if (rookXNumber === toXNumber) {
+      isVerticalMove = true
+    }
+
+    if (rookYNumber === toYNumber) {
+      isHorizontalMove = true
+    }
+
+    if (!isHorizontalMove && !isVerticalMove) {
+      return false
+    }
+
+    if (isHorizontalMove) {
+      // const isTargetOnTheLeft = toXNumber < rookXNumber
+      // const rookColumn = [...this.getRow(rookXNumber)]
+      //
+      // let cellsInTheWay = []
+      // if (!isTargetOnTheLeft) {
+      //   cellsInTheWay = [...rookColumn].reverse().slice(rookXNumber, toXNumber)
+      // } else {
+      //   cellsInTheWay = [...rookColumn]
+      //     .reverse()
+      //     .slice(toXNumber - 1, rookXNumber - 1)
+      // }
+      //
+      // const piecesBetweenRookAndTarget = cellsInTheWay
+      //   .map((cell) => cell?.piece)
+      //   .filter(Boolean)
+      //
+      // return !piecesBetweenRookAndTarget.length
+      return true
+    }
+
+    if (isVerticalMove) {
+      const isTargetAboveRook = toYNumber > rookYNumber
+      const rookColumn = [...this.getColumn(rookXNumber)]
+
+      let cellsInTheWay = []
+      if (isTargetAboveRook) {
+        cellsInTheWay = [...rookColumn].reverse().slice(rookYNumber, toYNumber)
+      } else {
+        cellsInTheWay = [...rookColumn]
+          .reverse()
+          .slice(toYNumber - 1, rookYNumber - 1)
+      }
+
+      const piecesBetweenRookAndTarget = cellsInTheWay
+        .map((cell) => cell.piece)
+        .filter(Boolean)
+
+      return !piecesBetweenRookAndTarget.length
+    }
+
+    return true
+  }
+
+  getRow(rowNumber: number) {
+    const row = this.board
+      .map((row) =>
+        row.map((col, index) => (index + 1 === rowNumber ? col : null))
+      )
+      .flat()
+      .filter(Boolean)
+
+    return row
+  }
+
+  getColumn(columnNumber: number) {
+    return this.board[columnNumber - 1]
   }
 
   canMoveKnight(from: string, to: string, piece: PieceType) {

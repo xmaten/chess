@@ -13,7 +13,8 @@ export const XAxis = () => {
       }}>
       {items.map((item) => (
         <p style={{ margin: 0, textTransform: "uppercase" }} key={item}>
-          {getNumberToLetter(item + 1)}
+          {item + 1}
+          {/*{getNumberToLetter(item + 1)}*/}
         </p>
       ))}
     </div>
