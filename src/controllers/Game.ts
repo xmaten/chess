@@ -107,24 +107,21 @@ export class Game {
     }
 
     if (isHorizontalMove) {
-      // const isTargetOnTheLeft = toXNumber < rookXNumber
-      // const rookColumn = [...this.getRow(rookXNumber)]
-      //
-      // let cellsInTheWay = []
-      // if (!isTargetOnTheLeft) {
-      //   cellsInTheWay = [...rookColumn].reverse().slice(rookXNumber, toXNumber)
-      // } else {
-      //   cellsInTheWay = [...rookColumn]
-      //     .reverse()
-      //     .slice(toXNumber - 1, rookXNumber - 1)
-      // }
-      //
-      // const piecesBetweenRookAndTarget = cellsInTheWay
-      //   .map((cell) => cell?.piece)
-      //   .filter(Boolean)
-      //
-      // return !piecesBetweenRookAndTarget.length
-      return true
+      const isTargetOnTheLeft = toXNumber < rookXNumber
+      const rookRow = [...this.getRow(rookYNumber)]
+
+      let cellsInTheWay = []
+      if (isTargetOnTheLeft) {
+        cellsInTheWay = [...rookRow].slice(toXNumber - 1, rookXNumber - 1)
+      } else {
+        cellsInTheWay = [...rookRow].slice(rookXNumber, toXNumber)
+      }
+
+      const piecesBetweenRookAndTarget = cellsInTheWay
+        .map((cell) => cell?.piece)
+        .filter(Boolean)
+
+      return !piecesBetweenRookAndTarget.length
     }
 
     if (isVerticalMove) {
@@ -153,7 +150,7 @@ export class Game {
   getRow(rowNumber: number) {
     const row = this.board
       .map((row) =>
-        row.map((col, index) => (index + 1 === rowNumber ? col : null))
+        row.map((col, index) => (index + 1 === rowNumber + 1 ? col : null))
       )
       .flat()
       .filter(Boolean)
