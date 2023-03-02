@@ -2,6 +2,7 @@ export type TCell = {
   id: string
   color: "light" | "dark"
   piece: PieceType | null
+  wasAlreadyMoved: boolean
 }
 
 export type PieceType =

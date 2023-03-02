@@ -42,7 +42,8 @@ export class Game {
         if (cell.id === to) {
           return {
             ...cell,
-            piece
+            piece,
+            wasAlreadyMoved: true
           }
         }
 
@@ -65,13 +66,68 @@ export class Game {
       return this.canMoveRook(from, to, piece)
     }
 
+    if (piece === "dark-pawn" || piece === "light-pawn") {
+      return this.canMovePawn(from, to, piece)
+    }
+
     return true
+  }
+
+  canMovePawn(from: string, to: string, piece: string) {
+    const [color] = piece.split("-")
+
+    const targetCell = this.getCell(to)
+
+    if (!targetCell) {
+      return false
+    }
+
+    if (
+      this.isTargetKing(targetCell) ||
+      this.isTargetSameColor(targetCell, color)
+    ) {
+      return false
+    }
+
+    const fromCell = this.getCell(from)
+    const pawnXNumber = Number(from.split("-")[0])
+    const pawnYNumber = Number(from.split("-")[1])
+
+    const toXNumber = Number(to.split("-")[0])
+    const toYNumber = Number(to.split("-")[1])
+
+    const nextCell = this.getCell(`${pawnXNumber}-${pawnYNumber + 1}`)
+    if (!fromCell?.wasAlreadyMoved) {
+      const nextCell2 = this.getCell(`${pawnXNumber}-${pawnYNumber + 2}`)
+      if (
+        !nextCell?.piece &&
+        !nextCell2?.piece &&
+        toYNumber === pawnYNumber + 2
+      ) {
+        return true
+      }
+    } else {
+      if (!nextCell?.piece && toYNumber === pawnYNumber + 1) {
+        return true
+      }
+    }
+
+    if (targetCell.piece) {
+      const topLeftCell = this.getCell(`${pawnXNumber - 1}-${pawnYNumber + 1}`)
+      const topRightCell = this.getCell(`${pawnXNumber + 1}-${pawnYNumber + 1}`)
+
+      if (topLeftCell || topRightCell) {
+        return true
+      }
+    }
+
+    return false
   }
 
   canMoveRook(from: string, to: string, piece: PieceType) {
     const [color] = piece.split("-")
 
-    const targetCell = this.getTargetCell(to)
+    const targetCell = this.getCell(to)
 
     if (!targetCell) {
       return false
@@ -86,7 +142,6 @@ export class Game {
 
     const rookXNumber = Number(from.split("-")[0])
     const rookYNumber = Number(from.split("-")[1])
-    // console.log("here", from)
 
     let isHorizontalMove = false
     let isVerticalMove = false
@@ -110,16 +165,19 @@ export class Game {
       const isTargetOnTheLeft = toXNumber < rookXNumber
       const rookRow = [...this.getRow(rookYNumber)]
 
-      let cellsInTheWay = []
+      // TODO: Fix type
+      let cellsInTheWay: any = []
       if (isTargetOnTheLeft) {
-        cellsInTheWay = [...rookRow].slice(toXNumber - 1, rookXNumber - 1)
+        cellsInTheWay = [...rookRow]
+          .slice(toXNumber - 1, rookXNumber - 1)
+          .filter(Boolean)
       } else {
-        cellsInTheWay = [...rookRow].slice(rookXNumber, toXNumber)
+        cellsInTheWay = [...rookRow]
+          .slice(rookXNumber, toXNumber)
+          .filter(Boolean)
       }
 
-      const piecesBetweenRookAndTarget = cellsInTheWay
-        .map((cell) => cell?.piece)
-        .filter(Boolean)
+      const piecesBetweenRookAndTarget = this.getPiecesFromCells(cellsInTheWay)
 
       return !piecesBetweenRookAndTarget.length
     }
@@ -137,14 +195,16 @@ export class Game {
           .slice(toYNumber - 1, rookYNumber - 1)
       }
 
-      const piecesBetweenRookAndTarget = cellsInTheWay
-        .map((cell) => cell.piece)
-        .filter(Boolean)
+      const piecesBetweenRookAndTarget = this.getPiecesFromCells(cellsInTheWay)
 
       return !piecesBetweenRookAndTarget.length
     }
 
-    return true
+    return false
+  }
+
+  getPiecesFromCells(cells: TCell[]) {
+    return cells.map((cell) => cell.piece).filter(Boolean)
   }
 
   getRow(rowNumber: number) {
@@ -165,7 +225,7 @@ export class Game {
   canMoveKnight(from: string, to: string, piece: PieceType) {
     const [color] = piece.split("-")
 
-    const targetCell = this.getTargetCell(to)
+    const targetCell = this.getCell(to)
 
     if (!targetCell) {
       return false
@@ -205,7 +265,7 @@ export class Game {
     return targetCell.piece?.includes(fromColor)
   }
 
-  getTargetCell(to: string) {
-    return this.allCells.find((cell) => cell.id === to)
+  getCell(id: string) {
+    return this.allCells.find((cell) => cell.id === id)
   }
 }
