@@ -70,7 +70,48 @@ export class Game {
       return this.canMovePawn(from, to, piece)
     }
 
+    if (piece === "dark-king" || piece === "light-king") {
+      return this.canMoveKing(from, to, piece)
+    }
+
     return true
+  }
+
+  canMoveKing(from: string, to: string, piece: string) {
+    const [color] = piece.split("-")
+
+    const targetCell = this.getCell(to)
+
+    if (!targetCell) {
+      return false
+    }
+
+    if (
+      this.isTargetKing(targetCell) ||
+      this.isTargetSameColor(targetCell, color)
+    ) {
+      return false
+    }
+
+    const kingXNumber = Number(from.split("-")[0])
+    const kingYNumber = Number(from.split("-")[1])
+
+    const potentialCellsIds = [
+      this.getCell(`${kingXNumber + 1}-${kingYNumber + 1}`),
+      this.getCell(`${kingXNumber - 1}-${kingYNumber - 1}`),
+      this.getCell(`${kingXNumber + 1}-${kingYNumber - 1}`),
+      this.getCell(`${kingXNumber - 1}-${kingYNumber + 1}`),
+      this.getCell(`${kingXNumber - 1}-${kingYNumber}`),
+      this.getCell(`${kingXNumber + 1}-${kingYNumber}`),
+      this.getCell(`${kingXNumber}-${kingYNumber - 1}`),
+      this.getCell(`${kingXNumber}-${kingYNumber + 1}`)
+    ].map((cell) => cell?.id)
+
+    if (potentialCellsIds.includes(to)) {
+      return true
+    }
+
+    return false
   }
 
   canMovePawn(from: string, to: string, piece: string) {
