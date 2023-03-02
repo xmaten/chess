@@ -101,7 +101,16 @@ export class Game {
         ? this.getCell(`${pawnXNumber}-${pawnYNumber + 1}`)
         : this.getCell(`${pawnXNumber}-${pawnYNumber - 1}`)
 
-    if (!fromCell?.wasAlreadyMoved) {
+    if (fromCell?.wasAlreadyMoved) {
+      if (
+        !nextCell?.piece &&
+        (piece === "light-pawn"
+          ? toYNumber === pawnYNumber + 1 && toXNumber === pawnXNumber
+          : toYNumber === pawnYNumber - 1 && toXNumber === pawnXNumber)
+      ) {
+        return true
+      }
+    } else {
       const nextCell2 =
         piece === "light-pawn"
           ? this.getCell(`${pawnXNumber}-${pawnYNumber + 2}`)
@@ -122,15 +131,6 @@ export class Game {
         (piece === "light-pawn"
           ? toYNumber === pawnYNumber + 2 && toXNumber === pawnXNumber
           : toYNumber === pawnYNumber - 2 && toXNumber === pawnXNumber)
-      ) {
-        return true
-      }
-    } else {
-      if (
-        !nextCell?.piece &&
-        (piece === "light-pawn"
-          ? toYNumber === pawnYNumber + 1 && toXNumber === pawnXNumber
-          : toYNumber === pawnYNumber - 1 && toXNumber === pawnXNumber)
       ) {
         return true
       }
