@@ -78,10 +78,41 @@ export class Game {
       return this.canMoveBishop(from, to, piece)
     }
 
-    return true
+    if (piece === "light-queen" || piece === "dark-queen") {
+      return this.canMoveQueen(from, to, piece)
+    }
+
+    return false
   }
 
-  canMoveBishop(from: string, to: string, piece: string) {
+  private canMoveQueen(
+    from: string,
+    to: string,
+    piece: "light-queen" | "dark-queen"
+  ) {
+    const [color] = piece.split("-")
+
+    const targetCell = this.getCell(to)
+
+    if (!targetCell) {
+      return false
+    }
+
+    if (
+      this.isTargetKing(targetCell) ||
+      this.isTargetSameColor(targetCell, color)
+    ) {
+      return false
+    }
+
+    return false
+  }
+
+  private canMoveBishop(
+    from: string,
+    to: string,
+    piece: "light-bishop" | "dark-bishop"
+  ) {
     const [color] = piece.split("-")
 
     const targetCell = this.getCell(to)
@@ -180,10 +211,14 @@ export class Game {
       }
     }
 
-    return true
+    return false
   }
 
-  canMoveKing(from: string, to: string, piece: string) {
+  private canMoveKing(
+    from: string,
+    to: string,
+    piece: "light-king" | "dark-king"
+  ) {
     const [color] = piece.split("-")
 
     const targetCell = this.getCell(to)
@@ -220,7 +255,11 @@ export class Game {
     return false
   }
 
-  canMovePawn(from: string, to: string, piece: string) {
+  private canMovePawn(
+    from: string,
+    to: string,
+    piece: "light-pawn" | "dark-pawn"
+  ) {
     const [color] = piece.split("-")
 
     const targetCell = this.getCell(to)
@@ -307,7 +346,11 @@ export class Game {
     return false
   }
 
-  canMoveRook(from: string, to: string, piece: PieceType) {
+  private canMoveRook(
+    from: string,
+    to: string,
+    piece: "light-rook" | "dark-rook"
+  ) {
     const [color] = piece.split("-")
 
     const targetCell = this.getCell(to)
@@ -405,7 +448,11 @@ export class Game {
     return this.board[columnNumber - 1]
   }
 
-  canMoveKnight(from: string, to: string, piece: PieceType) {
+  private canMoveKnight(
+    from: string,
+    to: string,
+    piece: "light-knight" | "dark-knight"
+  ) {
     const [color] = piece.split("-")
 
     const targetCell = this.getCell(to)
