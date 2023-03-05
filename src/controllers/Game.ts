@@ -105,6 +105,132 @@ export class Game {
       return false
     }
 
+    const queenXNumber = Number(from.split("-")[0])
+    const queenYNumber = Number(from.split("-")[1])
+
+    const toXNumber = Number(to.split("-")[0])
+    const toYNumber = Number(to.split("-")[1])
+
+    const isMovingDown =
+      piece === "light-queen"
+        ? queenYNumber > toYNumber
+        : queenYNumber < toYNumber
+    const isMovingLeft =
+      piece === "light-queen"
+        ? toXNumber < queenXNumber
+        : toXNumber > queenXNumber
+    const isVerticalMove = queenXNumber === toXNumber
+    const isHorizontalMove = queenYNumber === toYNumber
+
+    if (isHorizontalMove) {
+      const isTargetOnTheLeft = toXNumber < queenXNumber
+      const queenRow = [...this.getRow(queenYNumber)]
+
+      // TODO: Fix type
+      let cellsInTheWay: any = []
+      if (isTargetOnTheLeft) {
+        cellsInTheWay = [...queenRow]
+          .slice(toXNumber - 1, queenXNumber - 1)
+          .filter(Boolean)
+      } else {
+        cellsInTheWay = [...queenRow]
+          .slice(queenXNumber, toXNumber)
+          .filter(Boolean)
+      }
+
+      const piecesBetweenQueenAndTarget = this.getPiecesFromCells(cellsInTheWay)
+
+      return !piecesBetweenQueenAndTarget.length
+    }
+
+    if (isVerticalMove) {
+      const isTargetAboveQueen = toYNumber > queenYNumber
+      const queenColumn = [...this.getColumn(queenXNumber)]
+
+      let cellsInTheWay = []
+      if (isTargetAboveQueen) {
+        cellsInTheWay = [...queenColumn]
+          .reverse()
+          .slice(queenYNumber, toYNumber)
+      } else {
+        cellsInTheWay = [...queenColumn]
+          .reverse()
+          .slice(toYNumber - 1, queenYNumber - 1)
+      }
+
+      const piecesBetweenQueenAndTarget = this.getPiecesFromCells(cellsInTheWay)
+
+      return !piecesBetweenQueenAndTarget.length
+    }
+
+    if (isMovingDown) {
+      if (isMovingLeft) {
+        let cellsInTheWay = []
+        for (let i = queenXNumber - 1; i >= toXNumber; i--) {
+          const id = `${i}-${i - 1}`
+          const cell = this.getCell(id)
+          if (cell) {
+            cellsInTheWay.push(cell)
+          }
+        }
+
+        const piecesBetweenQueenAndTarget =
+          this.getPiecesFromCells(cellsInTheWay)
+
+        return !piecesBetweenQueenAndTarget.length
+      } else {
+        let cellsInTheWay = []
+        let iteration = 0
+        for (let i = queenXNumber; i < toXNumber; i++) {
+          iteration++
+          const id = `${i + 1}-${i - iteration * 2}`
+          const cell = this.getCell(id)
+          if (cell) {
+            cellsInTheWay.push(cell)
+          }
+        }
+
+        const piecesBetweenQueenAndTarget =
+          this.getPiecesFromCells(cellsInTheWay)
+
+        return !piecesBetweenQueenAndTarget.length
+      }
+    } else {
+      if (isMovingLeft) {
+        let cellsInTheWay = []
+        let iteration = 0
+        for (let i = queenXNumber - 1; i >= toXNumber; i--) {
+          iteration++
+          const id = `${i}-${i + iteration * 2 - 1}`
+          const cell = this.getCell(id)
+          if (cell) {
+            cellsInTheWay.push(cell)
+          }
+        }
+
+        const piecesBetweenQueenAndTarget =
+          this.getPiecesFromCells(cellsInTheWay)
+
+        return !piecesBetweenQueenAndTarget.length
+      } else {
+        let cellsInTheWay = []
+        let iteration = 0
+        for (let i = queenXNumber; i < toXNumber; i++) {
+          iteration++
+          const id = `${i + 1}-${i}`
+          const cell = this.getCell(id)
+          if (cell) {
+            cellsInTheWay.push(cell)
+          }
+        }
+
+        const piecesBetweenQueenAndTarget =
+          this.getPiecesFromCells(cellsInTheWay)
+
+        return !piecesBetweenQueenAndTarget.length
+      }
+    }
+
     return false
   }
 
@@ -170,10 +296,10 @@ export class Game {
           }
         }
 
-        const piecesBetweenRookAndTarget =
+        const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
 
-        return !piecesBetweenRookAndTarget.length
+        return !piecesBetweenBishopAndTarget.length
       }
     } else {
       if (isMovingLeft) {
@@ -188,10 +314,10 @@ export class Game {
           }
         }
 
-        const piecesBetweenRookAndTarget =
+        const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
 
-        return !piecesBetweenRookAndTarget.length
+        return !piecesBetweenBishopAndTarget.length
       } else {
         let cellsInTheWay = []
         let iteration = 0
@@ -204,10 +330,10 @@ export class Game {
           }
         }
 
-        const piecesBetweenRookAndTarget =
+        const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
 
-        return !piecesBetweenRookAndTarget.length
+        return !piecesBetweenBishopAndTarget.length
       }
     }
 
