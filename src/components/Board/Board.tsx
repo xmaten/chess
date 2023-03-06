@@ -12,7 +12,9 @@ type Props = {
 export const Board = ({ game }: Props) => {
   const [board, setBoard] = useState<TCell[][]>(game.boardState)
 
-  useEffect(() => game.observe(setBoard))
+  useEffect(() => {
+    game.observeBoardChange(setBoard)
+  }, [])
 
   return (
     <div style={{ display: "flex" }}>

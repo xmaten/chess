@@ -6,7 +6,8 @@ export type PositionObserver = ((position: any) => void) | null
 export class Game {
   private board = initialBoard
   private allCells: TCell[] = []
-  private observers: PositionObserver[] = []
+  private boardChangeObserver: PositionObserver = null
+  validCells: TCell[] = []
 
   constructor() {
     this.flattenBoard()
@@ -16,17 +17,13 @@ export class Game {
     return this.board
   }
 
-  public observe(o: PositionObserver): () => void {
-    this.observers.push(o)
-    this.emitChange()
-
-    return (): void => {
-      this.observers = this.observers.filter((t) => t !== o)
-    }
+  public observeBoardChange(o: PositionObserver) {
+    this.boardChangeObserver = o
+    this.emitBoardChange()
   }
 
-  private emitChange() {
-    this.observers.forEach((o) => o && o(this.board))
+  private emitBoardChange() {
+    this.boardChangeObserver && this.boardChangeObserver(this.board)
   }
 
   movePiece(from: string, to: string, piece: PieceType) {
@@ -54,7 +51,7 @@ export class Game {
     this.board = newBoard
 
     this.flattenBoard()
-    this.emitChange()
+    this.emitBoardChange()
   }
 
   canMovePiece(from: string, to: string, piece: PieceType) {
@@ -90,6 +87,7 @@ export class Game {
     to: string,
     piece: "light-queen" | "dark-queen"
   ) {
+    this.validCells = []
     const [color] = piece.split("-")
 
     const targetCell = this.getCell(to)

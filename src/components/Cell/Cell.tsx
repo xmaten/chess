@@ -2,6 +2,7 @@ import { TCell } from "@/types/Cell"
 import { useDrop } from "react-dnd"
 import { Game } from "@/controllers/Game"
 import { Piece } from "@/components/Piece/Piece"
+import { Overlay } from "@/components/Overlay/Overlay"
 
 type Props = {
   cell: TCell
@@ -10,7 +11,7 @@ type Props = {
 }
 
 export const Cell = ({ cell, game, board }: Props) => {
-  const [{}, drop] = useDrop(
+  const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: "piece",
       canDrop: (object) => {
@@ -38,10 +39,14 @@ export const Cell = ({ cell, game, board }: Props) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        fontSize: "30px"
+        fontSize: "30px",
+        position: "relative"
       }}>
       <p style={{ color: "pink", fontSize: "16px" }}>{cell.id}</p>
       <Piece cell={cell} piece={cell.piece} />
+      {isOver && !canDrop && <Overlay color="red" />}
+      {!isOver && canDrop && <Overlay color="yellow" />}
+      {isOver && canDrop && <Overlay color="green" />}
     </div>
   )
 }
