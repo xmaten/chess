@@ -511,8 +511,6 @@ export class Game {
       return false
     }
 
-    // console.log(isHorizontalMove, isVerticalMove)
-
     if (isHorizontalMove) {
       const isTargetOnTheLeft = toXNumber < rookXNumber
       const rookRow = [...this.getRow(8 - rookYNumber)]
