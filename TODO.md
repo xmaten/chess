@@ -3,12 +3,12 @@
 [x] Add indicator of legal and illegal moves
 
 [] Fix move validation
-- [] Rook
 - [x] Knight
+- [x] Pawn
+- [] Rook
 - [] Bishop
 - [] King
 - [] Queen
-- [] Pawn
 
 [] King moves - don't allow to move to close to opposite king
 
