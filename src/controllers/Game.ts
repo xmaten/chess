@@ -521,11 +521,11 @@ export class Game {
       let cellsInTheWay: any = []
       if (isTargetOnTheLeft) {
         cellsInTheWay = [...rookRow]
-          .slice(toXNumber - 1, rookXNumber - 1)
+          .slice(toXNumber, rookXNumber - 1)
           .filter(Boolean)
       } else {
         cellsInTheWay = [...rookRow]
-          .slice(rookXNumber, toXNumber)
+          .slice(rookXNumber + 1, toXNumber)
           .filter(Boolean)
       }
 
@@ -540,7 +540,9 @@ export class Game {
 
       let cellsInTheWay = []
       if (isTargetAboveRook) {
-        cellsInTheWay = [...rookColumn].reverse().slice(rookYNumber, toYNumber)
+        cellsInTheWay = [...rookColumn]
+          .reverse()
+          .slice(rookYNumber, toYNumber - 1)
       } else {
         cellsInTheWay = [...rookColumn]
           .reverse()
