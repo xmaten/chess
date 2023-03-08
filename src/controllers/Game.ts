@@ -266,28 +266,11 @@ export class Game {
       piece === "light-bishop"
         ? toXNumber < bishopXNumber
         : toXNumber > bishopXNumber
-
+    let cellsInTheWay = []
     if (isMovingDown) {
       if (isMovingLeft) {
-        let cellsInTheWay = []
-        for (let i = bishopXNumber - 1; i >= toXNumber; i--) {
-          const id = `${i}-${i - 1}`
-          const cell = this.getCell(id)
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-        }
-
-        const piecesBetweenRookAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-
-        return !piecesBetweenRookAndTarget.length
-      } else {
-        let cellsInTheWay = []
-        let iteration = 0
-        for (let i = bishopXNumber; i < toXNumber; i++) {
-          iteration++
-          const id = `${i + 1}-${i - iteration * 2}`
+        for (let i = bishopXNumber; i >= toXNumber + 1; i--) {
+          const id = `${i - 1}-${i - 1}`
           const cell = this.getCell(id)
           if (cell) {
             cellsInTheWay.push(cell)
@@ -297,7 +280,33 @@ export class Game {
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
 
-        return !piecesBetweenBishopAndTarget.length
+        return (
+          cellsInTheWay
+            .map((cell) => cell.id)
+            .includes(`${toXNumber}-${toYNumber}`) &&
+          !piecesBetweenBishopAndTarget.length
+        )
+      } else {
+        let cellsInTheWay = []
+        let iteration = 0
+        for (let i = bishopXNumber; i < toXNumber; i++) {
+          iteration++
+          const id = `${i + 1}-${i - iteration * 2 + 1}`
+          const cell = this.getCell(id)
+          if (cell) {
+            cellsInTheWay.push(cell)
+          }
+        }
+
+        const piecesBetweenBishopAndTarget =
+          this.getPiecesFromCells(cellsInTheWay)
+
+        return (
+          cellsInTheWay
+            .map((cell) => cell.id)
+            .includes(`${toXNumber}-${toYNumber}`) &&
+          !piecesBetweenBishopAndTarget.length
+        )
       }
     } else {
       if (isMovingLeft) {
@@ -305,7 +314,7 @@ export class Game {
         let iteration = 0
         for (let i = bishopXNumber - 1; i >= toXNumber; i--) {
           iteration++
-          const id = `${i}-${i + iteration * 2 - 1}`
+          const id = `${i}-${i + iteration * 2}`
           const cell = this.getCell(id)
           if (cell) {
             cellsInTheWay.push(cell)
@@ -315,13 +324,18 @@ export class Game {
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
 
-        return !piecesBetweenBishopAndTarget.length
+        return (
+          cellsInTheWay
+            .map((cell) => cell.id)
+            .includes(`${toXNumber}-${toYNumber}`) &&
+          !piecesBetweenBishopAndTarget.length
+        )
       } else {
         let cellsInTheWay = []
         let iteration = 0
         for (let i = bishopXNumber; i < toXNumber; i++) {
           iteration++
-          const id = `${i + 1}-${i}`
+          const id = `${i + 1}-${i + 1}`
           const cell = this.getCell(id)
           if (cell) {
             cellsInTheWay.push(cell)
@@ -331,7 +345,12 @@ export class Game {
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
 
-        return !piecesBetweenBishopAndTarget.length
+        return (
+          cellsInTheWay
+            .map((cell) => cell.id)
+            .includes(`${toXNumber}-${toYNumber}`) &&
+          !piecesBetweenBishopAndTarget.length
+        )
       }
     }
 
