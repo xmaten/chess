@@ -45,7 +45,7 @@ export const initialBoard: TCell[][] = [
     { id: "5-8", color: "light", piece: "dark-king", wasAlreadyMoved: false },
     { id: "5-7", color: "dark", piece: "dark-pawn", wasAlreadyMoved: false },
     { id: "5-6", color: "light", piece: null, wasAlreadyMoved: false },
-    { id: "5-5", color: "dark", piece: null, wasAlreadyMoved: false },
+    { id: "5-5", color: "dark", piece: "light-bishop", wasAlreadyMoved: false },
     {
       id: "5-4",
       color: "light",
@@ -81,7 +81,7 @@ export const initialBoard: TCell[][] = [
     { id: "8-7", color: "light", piece: "dark-pawn", wasAlreadyMoved: false },
     { id: "8-6", color: "dark", piece: null, wasAlreadyMoved: false },
     { id: "8-5", color: "light", piece: null, wasAlreadyMoved: false },
-    { id: "8-4", color: "dark", piece: "light-bishop", wasAlreadyMoved: false },
+    { id: "8-4", color: "dark", piece: null, wasAlreadyMoved: false },
     { id: "8-3", color: "light", piece: null, wasAlreadyMoved: false },
     { id: "8-2", color: "dark", piece: "light-pawn", wasAlreadyMoved: false },
     { id: "8-1", color: "light", piece: "light-rook", wasAlreadyMoved: false }

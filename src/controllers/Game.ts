@@ -266,90 +266,122 @@ export class Game {
       piece === "light-bishop"
         ? toXNumber < bishopXNumber
         : toXNumber > bishopXNumber
-    let cellsInTheWay = []
     if (isMovingDown) {
       if (isMovingLeft) {
-        for (let i = bishopXNumber; i >= toXNumber + 1; i--) {
-          const id = `${i - 1}-${i - 1}`
+        const cellsInTheWay = []
+        let currentX = bishopXNumber - 1
+        let currentY = bishopYNumber - 1
+        while (currentX !== toXNumber - 1 && currentY !== toYNumber - 1) {
+          const id = `${currentX}-${currentY}`
           const cell = this.getCell(id)
+
           if (cell) {
             cellsInTheWay.push(cell)
           }
+
+          currentX = currentX - 1
+          currentY = currentY - 1
         }
 
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
+        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+        const isTargetAfterFirstPieceInTheWay =
+          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
 
         return (
           cellsInTheWay
             .map((cell) => cell.id)
             .includes(`${toXNumber}-${toYNumber}`) &&
-          !piecesBetweenBishopAndTarget.length
+          (isTargetAfterFirstPieceInTheWay ||
+            piecesBetweenBishopAndTarget.length === 0)
         )
       } else {
-        let cellsInTheWay = []
-        let iteration = 0
-        for (let i = bishopXNumber; i < toXNumber; i++) {
-          iteration++
-          const id = `${i + 1}-${i - iteration * 2 + 1}`
+        const cellsInTheWay = []
+        let currentX = bishopXNumber + 1
+        let currentY = bishopYNumber - 1
+        while (currentX !== toXNumber + 1 && currentY !== toYNumber - 1) {
+          const id = `${currentX}-${currentY}`
           const cell = this.getCell(id)
           if (cell) {
             cellsInTheWay.push(cell)
           }
+
+          currentX = currentX + 1
+          currentY = currentY - 1
         }
 
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
+        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+        const isTargetAfterFirstPieceInTheWay =
+          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
 
         return (
           cellsInTheWay
             .map((cell) => cell.id)
             .includes(`${toXNumber}-${toYNumber}`) &&
-          !piecesBetweenBishopAndTarget.length
+          (isTargetAfterFirstPieceInTheWay ||
+            piecesBetweenBishopAndTarget.length === 0)
         )
       }
     } else {
       if (isMovingLeft) {
-        let cellsInTheWay = []
-        let iteration = 0
-        for (let i = bishopXNumber - 1; i >= toXNumber; i--) {
-          iteration++
-          const id = `${i}-${i + iteration * 2}`
+        const cellsInTheWay = []
+        let currentX = bishopXNumber - 1
+        let currentY = bishopYNumber + 1
+        while (currentX !== toXNumber - 2 && currentY !== toYNumber + 1) {
+          const id = `${currentX}-${currentY}`
           const cell = this.getCell(id)
+
           if (cell) {
             cellsInTheWay.push(cell)
           }
+
+          currentX = currentX - 1
+          currentY = currentY + 1
         }
 
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
+        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+        const isTargetAfterFirstPieceInTheWay =
+          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
 
         return (
           cellsInTheWay
             .map((cell) => cell.id)
             .includes(`${toXNumber}-${toYNumber}`) &&
-          !piecesBetweenBishopAndTarget.length
+          (isTargetAfterFirstPieceInTheWay ||
+            piecesBetweenBishopAndTarget.length === 0)
         )
       } else {
-        let cellsInTheWay = []
-        let iteration = 0
-        for (let i = bishopXNumber; i < toXNumber; i++) {
-          iteration++
-          const id = `${i + 1}-${i + 1}`
+        const cellsInTheWay = []
+        let currentX = bishopXNumber + 1
+        let currentY = bishopYNumber + 1
+        while (currentX !== toXNumber + 1 && currentY !== toYNumber + 1) {
+          const id = `${currentX}-${currentY}`
           const cell = this.getCell(id)
           if (cell) {
             cellsInTheWay.push(cell)
           }
+
+          currentX = currentX + 1
+          currentY = currentY + 1
         }
 
         const piecesBetweenBishopAndTarget =
           this.getPiecesFromCells(cellsInTheWay)
+        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+        const isTargetAfterFirstPieceInTheWay =
+          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
 
         return (
           cellsInTheWay
             .map((cell) => cell.id)
             .includes(`${toXNumber}-${toYNumber}`) &&
-          !piecesBetweenBishopAndTarget.length
+          (isTargetAfterFirstPieceInTheWay ||
+            piecesBetweenBishopAndTarget.length === 0)
         )
       }
     }

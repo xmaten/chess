@@ -4,7 +4,7 @@
   - [x] Knight + capture
   - [x] Pawn + capture
   - [x] Rook + capture
-  - [] Bishop + capture
+  - [x] Bishop + capture
   - [] King + capture
   - [] Queen + capture
 - [] Check move validation for dark pieces
