@@ -307,7 +307,7 @@ export class Game {
     }
 
     if (isVerticalMove) {
-      return this.canMoveVertically(toXNumber, queenXNumber, queenYNumber)
+      return this.canMoveVertically(toYNumber, queenXNumber, queenYNumber)
     }
 
     if (isMovingDown) {
@@ -596,7 +596,7 @@ export class Game {
     }
 
     if (isVerticalMove) {
-      return this.canMoveVertically(toXNumber, rookXNumber, rookYNumber)
+      return this.canMoveVertically(toYNumber, rookXNumber, rookYNumber)
     }
 
     return false

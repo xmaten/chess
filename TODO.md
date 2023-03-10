@@ -3,21 +3,22 @@
 - [] Fix move validation
   - [x] Knight + capture
   - [x] Pawn + capture
-  - [x] Rook + capture
   - [x] Bishop + capture
   - [x] King + capture
   - [x] Queen + capture
+  - [] Rook + capture
 - [] Check move validation for dark pieces
   - [x] Knight + capture
   - [x] Pawn + capture
+  - [x] King + capture
   - [] Rook + capture
   - [] Bishop + capture
-  - [] King + capture
   - [] Queen + capture
 - [] King moves - don't allow to move to close to opposite king
-- [] Cleanup types in Game observers
 - [] Expand move validation for checking if there won't be check after move
 - [] Add support for castling
 - [] Add en-passant
 - [] Check 
 - [] Mate
+- [] Cleanup types in Game observers
+- [] Refactor move validation
