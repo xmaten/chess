@@ -82,6 +82,187 @@ export class Game {
     return false
   }
 
+  private canMoveHorizontally(
+    toXNumber: number,
+    pieceXNumber: number,
+    pieceYNumber: number
+  ) {
+    const isTargetOnTheLeft = toXNumber < pieceXNumber
+    const row = [...this.getRow(8 - pieceYNumber)]
+
+    // TODO: Fix type
+    let cellsInTheWay: any = []
+    if (isTargetOnTheLeft) {
+      cellsInTheWay = [...row]
+        .slice(toXNumber, pieceXNumber - 1)
+        .filter(Boolean)
+    } else {
+      cellsInTheWay = [...row]
+        .slice(pieceXNumber + 1, toXNumber)
+        .filter(Boolean)
+    }
+
+    return !this.getPiecesFromCells(cellsInTheWay).length
+  }
+
+  private canMoveVertically(
+    toYNumber: number,
+    pieceXNumber: number,
+    pieceYNumber: number
+  ) {
+    const isTargetAbovePiece = toYNumber > pieceXNumber
+    const column = [...this.getColumn(pieceYNumber)]
+
+    let cellsInTheWay = []
+    if (isTargetAbovePiece) {
+      cellsInTheWay = [...column].reverse().slice(pieceXNumber, toYNumber - 1)
+    } else {
+      cellsInTheWay = [...column]
+        .reverse()
+        .slice(toYNumber - 1, pieceXNumber - 1)
+    }
+
+    return !this.getPiecesFromCells(cellsInTheWay).length
+  }
+
+  private canMoveDiagonallyDownLeft(
+    toXNumber: number,
+    toYNumber: number,
+    pieceXNumber: number,
+    pieceYNumber: number
+  ) {
+    const cellsInTheWay = []
+    let currentX = pieceXNumber - 1
+    let currentY = pieceYNumber - 1
+    while (currentX !== toXNumber - 1 && currentY !== toYNumber - 1) {
+      const id = `${currentX}-${currentY}`
+      const cell = this.getCell(id)
+
+      if (cell) {
+        cellsInTheWay.push(cell)
+      }
+
+      currentX = currentX - 1
+      currentY = currentY - 1
+    }
+
+    const piecesBetweenBishopAndTarget = this.getPiecesFromCells(cellsInTheWay)
+    const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+    const isTargetAfterFirstPieceInTheWay =
+      firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
+
+    return (
+      cellsInTheWay
+        .map((cell) => cell.id)
+        .includes(`${toXNumber}-${toYNumber}`) &&
+      (isTargetAfterFirstPieceInTheWay ||
+        piecesBetweenBishopAndTarget.length === 0)
+    )
+  }
+
+  private canMoveDiagonallyDownRight(
+    toXNumber: number,
+    toYNumber: number,
+    pieceXNumber: number,
+    pieceYNumber: number
+  ) {
+    const cellsInTheWay = []
+    let currentX = pieceXNumber + 1
+    let currentY = pieceYNumber - 1
+    while (currentX !== toXNumber + 1 && currentY !== toYNumber - 1) {
+      const id = `${currentX}-${currentY}`
+      const cell = this.getCell(id)
+      if (cell) {
+        cellsInTheWay.push(cell)
+      }
+
+      currentX = currentX + 1
+      currentY = currentY - 1
+    }
+
+    const piecesBetweenBishopAndTarget = this.getPiecesFromCells(cellsInTheWay)
+    const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+    const isTargetAfterFirstPieceInTheWay =
+      firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
+
+    return (
+      cellsInTheWay
+        .map((cell) => cell.id)
+        .includes(`${toXNumber}-${toYNumber}`) &&
+      (isTargetAfterFirstPieceInTheWay ||
+        piecesBetweenBishopAndTarget.length === 0)
+    )
+  }
+
+  private canMoveDiagonallyUpLeft(
+    toXNumber: number,
+    toYNumber: number,
+    pieceXNumber: number,
+    pieceYNumber: number
+  ) {
+    const cellsInTheWay = []
+    let currentX = pieceXNumber - 1
+    let currentY = pieceYNumber + 1
+    while (currentX !== toXNumber - 2 && currentY !== toYNumber + 1) {
+      const id = `${currentX}-${currentY}`
+      const cell = this.getCell(id)
+
+      if (cell) {
+        cellsInTheWay.push(cell)
+      }
+
+      currentX = currentX - 1
+      currentY = currentY + 1
+    }
+
+    const piecesBetweenBishopAndTarget = this.getPiecesFromCells(cellsInTheWay)
+    const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+    const isTargetAfterFirstPieceInTheWay =
+      firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
+
+    return (
+      cellsInTheWay
+        .map((cell) => cell.id)
+        .includes(`${toXNumber}-${toYNumber}`) &&
+      (isTargetAfterFirstPieceInTheWay ||
+        piecesBetweenBishopAndTarget.length === 0)
+    )
+  }
+
+  private canMoveDiagonallyUpRight(
+    toXNumber: number,
+    toYNumber: number,
+    pieceXNumber: number,
+    pieceYNumber: number
+  ) {
+    const cellsInTheWay = []
+    let currentX = pieceXNumber + 1
+    let currentY = pieceYNumber + 1
+    while (currentX !== toXNumber + 1 && currentY !== toYNumber + 1) {
+      const id = `${currentX}-${currentY}`
+      const cell = this.getCell(id)
+      if (cell) {
+        cellsInTheWay.push(cell)
+      }
+
+      currentX = currentX + 1
+      currentY = currentY + 1
+    }
+
+    const piecesBetweenBishopAndTarget = this.getPiecesFromCells(cellsInTheWay)
+    const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
+    const isTargetAfterFirstPieceInTheWay =
+      firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
+
+    return (
+      cellsInTheWay
+        .map((cell) => cell.id)
+        .includes(`${toXNumber}-${toYNumber}`) &&
+      (isTargetAfterFirstPieceInTheWay ||
+        piecesBetweenBishopAndTarget.length === 0)
+    )
+  }
+
   private canMoveQueen(
     from: string,
     to: string,
@@ -122,164 +303,43 @@ export class Game {
 
     // Same code as rook - reuse
     if (isHorizontalMove) {
-      const isTargetOnTheLeft = toXNumber < queenXNumber
-      const queenRow = [...this.getRow(8 - queenYNumber)]
-
-      // TODO: Fix type
-      let cellsInTheWay: any = []
-      if (isTargetOnTheLeft) {
-        cellsInTheWay = [...queenRow]
-          .slice(toXNumber, queenXNumber - 1)
-          .filter(Boolean)
-      } else {
-        cellsInTheWay = [...queenRow]
-          .slice(queenXNumber + 1, toXNumber)
-          .filter(Boolean)
-      }
-
-      const piecesBetweenRookAndTarget = this.getPiecesFromCells(cellsInTheWay)
-
-      return !piecesBetweenRookAndTarget.length
+      return this.canMoveHorizontally(toXNumber, queenXNumber, queenYNumber)
     }
 
-    // Same code as rook - reuse
     if (isVerticalMove) {
-      const isTargetAboveRook = toYNumber > queenYNumber
-      const queenColumn = [...this.getColumn(queenXNumber)]
-
-      let cellsInTheWay = []
-      if (isTargetAboveRook) {
-        cellsInTheWay = [...queenColumn]
-          .reverse()
-          .slice(queenYNumber, toYNumber - 1)
-      } else {
-        cellsInTheWay = [...queenColumn]
-          .reverse()
-          .slice(toYNumber - 1, queenYNumber - 1)
-      }
-
-      const piecesBetweenRookAndTarget = this.getPiecesFromCells(cellsInTheWay)
-
-      return !piecesBetweenRookAndTarget.length
+      return this.canMoveVertically(toXNumber, queenXNumber, queenYNumber)
     }
 
-    // Same as for bishop - reuse
     if (isMovingDown) {
       if (isMovingLeft) {
-        const cellsInTheWay = []
-        let currentX = queenXNumber - 1
-        let currentY = queenYNumber - 1
-        while (currentX !== toXNumber - 1 && currentY !== toYNumber - 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX - 1
-          currentY = currentY - 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyDownLeft(
+          toXNumber,
+          toYNumber,
+          queenXNumber,
+          queenYNumber
         )
       } else {
-        const cellsInTheWay = []
-        let currentX = queenXNumber + 1
-        let currentY = queenYNumber - 1
-        while (currentX !== toXNumber + 1 && currentY !== toYNumber - 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX + 1
-          currentY = currentY - 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyDownRight(
+          toXNumber,
+          toYNumber,
+          queenXNumber,
+          queenYNumber
         )
       }
     } else {
       if (isMovingLeft) {
-        const cellsInTheWay = []
-        let currentX = queenXNumber - 1
-        let currentY = queenYNumber + 1
-        while (currentX !== toXNumber - 2 && currentY !== toYNumber + 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX - 1
-          currentY = currentY + 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyUpLeft(
+          toXNumber,
+          toYNumber,
+          queenXNumber,
+          queenYNumber
         )
       } else {
-        const cellsInTheWay = []
-        let currentX = queenXNumber + 1
-        let currentY = queenYNumber + 1
-        while (currentX !== toXNumber + 1 && currentY !== toYNumber + 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX + 1
-          currentY = currentY + 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyUpRight(
+          toXNumber,
+          toYNumber,
+          queenXNumber,
+          queenYNumber
         )
       }
     }
@@ -323,120 +383,34 @@ export class Game {
         : toXNumber > bishopXNumber
     if (isMovingDown) {
       if (isMovingLeft) {
-        const cellsInTheWay = []
-        let currentX = bishopXNumber - 1
-        let currentY = bishopYNumber - 1
-        while (currentX !== toXNumber - 1 && currentY !== toYNumber - 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX - 1
-          currentY = currentY - 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyDownLeft(
+          toXNumber,
+          toYNumber,
+          bishopXNumber,
+          bishopYNumber
         )
       } else {
-        const cellsInTheWay = []
-        let currentX = bishopXNumber + 1
-        let currentY = bishopYNumber - 1
-        while (currentX !== toXNumber + 1 && currentY !== toYNumber - 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX + 1
-          currentY = currentY - 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyDownRight(
+          toXNumber,
+          toYNumber,
+          bishopXNumber,
+          bishopYNumber
         )
       }
     } else {
       if (isMovingLeft) {
-        const cellsInTheWay = []
-        let currentX = bishopXNumber - 1
-        let currentY = bishopYNumber + 1
-        while (currentX !== toXNumber - 2 && currentY !== toYNumber + 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX - 1
-          currentY = currentY + 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyUpLeft(
+          toXNumber,
+          toYNumber,
+          bishopXNumber,
+          bishopYNumber
         )
       } else {
-        const cellsInTheWay = []
-        let currentX = bishopXNumber + 1
-        let currentY = bishopYNumber + 1
-        while (currentX !== toXNumber + 1 && currentY !== toYNumber + 1) {
-          const id = `${currentX}-${currentY}`
-          const cell = this.getCell(id)
-          if (cell) {
-            cellsInTheWay.push(cell)
-          }
-
-          currentX = currentX + 1
-          currentY = currentY + 1
-        }
-
-        const piecesBetweenBishopAndTarget =
-          this.getPiecesFromCells(cellsInTheWay)
-        const firstPieceInTheWay = cellsInTheWay.find((cell) => cell.piece)
-        const isTargetAfterFirstPieceInTheWay =
-          firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-
-        return (
-          cellsInTheWay
-            .map((cell) => cell.id)
-            .includes(`${toXNumber}-${toYNumber}`) &&
-          (isTargetAfterFirstPieceInTheWay ||
-            piecesBetweenBishopAndTarget.length === 0)
+        return this.canMoveDiagonallyUpRight(
+          toXNumber,
+          toYNumber,
+          bishopXNumber,
+          bishopYNumber
         )
       }
     }
@@ -618,44 +592,11 @@ export class Game {
     }
 
     if (isHorizontalMove) {
-      const isTargetOnTheLeft = toXNumber < rookXNumber
-      const rookRow = [...this.getRow(8 - rookYNumber)]
-
-      // TODO: Fix type
-      let cellsInTheWay: any = []
-      if (isTargetOnTheLeft) {
-        cellsInTheWay = [...rookRow]
-          .slice(toXNumber, rookXNumber - 1)
-          .filter(Boolean)
-      } else {
-        cellsInTheWay = [...rookRow]
-          .slice(rookXNumber + 1, toXNumber)
-          .filter(Boolean)
-      }
-
-      const piecesBetweenRookAndTarget = this.getPiecesFromCells(cellsInTheWay)
-
-      return !piecesBetweenRookAndTarget.length
+      return this.canMoveHorizontally(toXNumber, rookXNumber, rookYNumber)
     }
 
     if (isVerticalMove) {
-      const isTargetAboveRook = toYNumber > rookYNumber
-      const rookColumn = [...this.getColumn(rookXNumber)]
-
-      let cellsInTheWay = []
-      if (isTargetAboveRook) {
-        cellsInTheWay = [...rookColumn]
-          .reverse()
-          .slice(rookYNumber, toYNumber - 1)
-      } else {
-        cellsInTheWay = [...rookColumn]
-          .reverse()
-          .slice(toYNumber - 1, rookYNumber - 1)
-      }
-
-      const piecesBetweenRookAndTarget = this.getPiecesFromCells(cellsInTheWay)
-
-      return !piecesBetweenRookAndTarget.length
+      return this.canMoveVertically(toXNumber, rookXNumber, rookYNumber)
     }
 
     return false
