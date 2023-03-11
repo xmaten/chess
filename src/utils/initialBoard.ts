@@ -32,7 +32,7 @@ export const initialBoard: TCell[][] = [
     { id: "3-1", color: "dark", piece: "light-bishop", wasAlreadyMoved: false }
   ],
   [
-    { id: "4-8", color: "dark", piece: "dark-queen", wasAlreadyMoved: false },
+    { id: "4-8", color: "dark", piece: null, wasAlreadyMoved: false }, // "dark-queen"
     { id: "4-7", color: "light", piece: "dark-pawn", wasAlreadyMoved: false },
     { id: "4-6", color: "dark", piece: null, wasAlreadyMoved: false },
     { id: "4-5", color: "light", piece: null, wasAlreadyMoved: false },

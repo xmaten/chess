@@ -105,15 +105,16 @@ export class Game {
 
     const firstPieceInTheWay = cellsInTheWay.find((cell: any) => cell.piece)
     const isTargetAfterFirstPieceInTheWay =
-      firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
-    console.log(cellsInTheWay)
+      firstPieceInTheWay?.id ===
+      `${isTargetOnTheLeft ? toXNumber + 1 : toXNumber - 1}-${toYNumber}`
 
     return (
       cellsInTheWay
         .map((cell: any) => cell.id)
         .includes(`${toXNumber}-${toYNumber}`) &&
       (piecesBetweenPieceAndTarget.length === 0 ||
-        piecesBetweenPieceAndTarget.length === 1)
+        piecesBetweenPieceAndTarget.length === 1) &&
+      !isTargetAfterFirstPieceInTheWay
     )
   }
 
