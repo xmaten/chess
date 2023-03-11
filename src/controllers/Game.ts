@@ -84,6 +84,7 @@ export class Game {
 
   private canMoveHorizontally(
     toXNumber: number,
+    toYNumber: number,
     pieceXNumber: number,
     pieceYNumber: number
   ) {
@@ -94,15 +95,26 @@ export class Game {
     let cellsInTheWay: any = []
     if (isTargetOnTheLeft) {
       cellsInTheWay = [...row]
-        .slice(toXNumber, pieceXNumber - 1)
+        .slice(toXNumber - 1, pieceXNumber - 1)
         .filter(Boolean)
     } else {
-      cellsInTheWay = [...row]
-        .slice(pieceXNumber + 1, toXNumber)
-        .filter(Boolean)
+      cellsInTheWay = [...row].slice(pieceXNumber, toXNumber).filter(Boolean)
     }
 
-    return !this.getPiecesFromCells(cellsInTheWay).length
+    const piecesBetweenPieceAndTarget = this.getPiecesFromCells(cellsInTheWay)
+
+    const firstPieceInTheWay = cellsInTheWay.find((cell: any) => cell.piece)
+    const isTargetAfterFirstPieceInTheWay =
+      firstPieceInTheWay?.id === `${toXNumber}-${toYNumber}`
+    console.log(cellsInTheWay)
+
+    return (
+      cellsInTheWay
+        .map((cell: any) => cell.id)
+        .includes(`${toXNumber}-${toYNumber}`) &&
+      (piecesBetweenPieceAndTarget.length === 0 ||
+        piecesBetweenPieceAndTarget.length === 1)
+    )
   }
 
   private canMoveVertically(
@@ -303,7 +315,12 @@ export class Game {
 
     // Same code as rook - reuse
     if (isHorizontalMove) {
-      return this.canMoveHorizontally(toXNumber, queenXNumber, queenYNumber)
+      return this.canMoveHorizontally(
+        toXNumber,
+        toYNumber,
+        queenXNumber,
+        queenYNumber
+      )
     }
 
     if (isVerticalMove) {
@@ -592,7 +609,12 @@ export class Game {
     }
 
     if (isHorizontalMove) {
-      return this.canMoveHorizontally(toXNumber, rookXNumber, rookYNumber)
+      return this.canMoveHorizontally(
+        toXNumber,
+        toYNumber,
+        rookXNumber,
+        rookYNumber
+      )
     }
 
     if (isVerticalMove) {
