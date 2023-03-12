@@ -104,9 +104,9 @@ export class Game {
     const piecesBetweenPieceAndTarget = this.getPiecesFromCells(cellsInTheWay)
 
     const firstPieceInTheWay = cellsInTheWay.find((cell: any) => cell.piece)
-    const isTargetAfterFirstPieceInTheWay =
-      firstPieceInTheWay?.id ===
-      `${isTargetOnTheLeft ? toXNumber + 1 : toXNumber - 1}-${toYNumber}`
+    const isTargetAfterFirstPieceInTheWay = isTargetOnTheLeft
+      ? Number(firstPieceInTheWay?.id.split("-")[0]) > toXNumber
+      : Number(firstPieceInTheWay?.id.split("-")[0]) < toXNumber
 
     return (
       cellsInTheWay
