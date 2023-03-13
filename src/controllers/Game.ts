@@ -119,23 +119,37 @@ export class Game {
   }
 
   private canMoveVertically(
+    toXNumber: number,
     toYNumber: number,
     pieceXNumber: number,
     pieceYNumber: number
   ) {
     const isTargetAbovePiece = toYNumber > pieceXNumber
-    const column = [...this.getColumn(pieceYNumber)]
+    const column = [...this.getColumn(pieceXNumber)]
 
     let cellsInTheWay = []
     if (isTargetAbovePiece) {
-      cellsInTheWay = [...column].reverse().slice(pieceXNumber, toYNumber - 1)
+      cellsInTheWay = [...column].reverse().slice(pieceXNumber, toXNumber + 1)
     } else {
       cellsInTheWay = [...column]
         .reverse()
-        .slice(toYNumber - 1, pieceXNumber - 1)
+        .slice(toYNumber - 1, pieceYNumber - 1)
     }
+    const piecesBetweenPieceAndTarget = this.getPiecesFromCells(cellsInTheWay)
 
-    return !this.getPiecesFromCells(cellsInTheWay).length
+    const firstPieceInTheWay = cellsInTheWay.find((cell: any) => cell.piece)
+    const isTargetAfterFirstPieceInTheWay = isTargetAbovePiece
+      ? Number(firstPieceInTheWay?.id.split("-")[1]) > toYNumber
+      : Number(firstPieceInTheWay?.id.split("-")[1]) < toYNumber
+
+    return (
+      cellsInTheWay
+        .map((cell: any) => cell.id)
+        .includes(`${toXNumber}-${toYNumber}`) &&
+      (piecesBetweenPieceAndTarget.length === 0 ||
+        piecesBetweenPieceAndTarget.length === 1) &&
+      !isTargetAfterFirstPieceInTheWay
+    )
   }
 
   private canMoveDiagonallyDownLeft(
@@ -325,7 +339,12 @@ export class Game {
     }
 
     if (isVerticalMove) {
-      return this.canMoveVertically(toYNumber, queenXNumber, queenYNumber)
+      return this.canMoveVertically(
+        toXNumber,
+        toYNumber,
+        queenXNumber,
+        queenYNumber
+      )
     }
 
     if (isMovingDown) {
@@ -619,7 +638,12 @@ export class Game {
     }
 
     if (isVerticalMove) {
-      return this.canMoveVertically(toYNumber, rookXNumber, rookYNumber)
+      return this.canMoveVertically(
+        toXNumber,
+        toYNumber,
+        rookXNumber,
+        rookYNumber
+      )
     }
 
     return false
