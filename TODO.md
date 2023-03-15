@@ -1,3 +1,18 @@
+- [] Add Tailwind
+- [] Refactor Game
+- [] Fix any types
+
+---
+Flow:
+
+1. User provides name and GameID
+2. Gets from backend userToken
+3. Is redirected to /game/:id page
+4. Token is saved in Context API
+5. Each request attaches userToken so that backend can validate
+
+---
+
 - [x] Add move validation
 - [x] Add indicator of legal and illegal moves
 - [] Fix move validation

@@ -1,5 +1,5 @@
-import { Game } from "@/components/Game/Game"
+import { JoinGame } from "@/components/JoinGame/JoinGame"
 
 export default function Home() {
-  return <Game />
+  return <JoinGame />
 }
