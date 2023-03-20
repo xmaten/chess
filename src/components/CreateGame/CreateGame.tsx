@@ -7,9 +7,8 @@ import { Card } from "@/components/Card/Card"
 import { Title } from "@/components/Title/Title"
 import { Input } from "@/components/Input/Input"
 
-export const JoinGame = () => {
+export const CreateGame = () => {
   const [username, setUsername] = useState("")
-  const [gameId, setGameId] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
 
@@ -23,19 +22,13 @@ export const JoinGame = () => {
       return
     }
 
-    if (!gameId) {
-      setGameId("Game ID is required")
-      return
-    }
-
     const payload = {
-      username,
-      gameId
+      username
     }
 
     try {
       // 1. Save token
-      const { data } = await httpClient.post("/game/join", payload)
+      const { data } = await httpClient.post("/game/create", payload)
 
       // 2. Redirect to game
       await router.push(`/game/${data.gameId}`)
@@ -46,17 +39,16 @@ export const JoinGame = () => {
 
   return (
     <Card>
-      <Title>Join Chess Game</Title>
+      <Title>Create Chess Game</Title>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col mt-5">
           <Input value={username} onChange={setUsername} label="Username:" />
-          <Input value={gameId} onChange={setGameId} label="Game ID:" />
         </div>
 
         {error && <ErrorText error={error} />}
 
         <Button disabled={Boolean(error)} type="submit">
-          Join Game
+          Create Game
         </Button>
       </form>
     </Card>
