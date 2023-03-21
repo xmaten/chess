@@ -5,7 +5,7 @@ export const Input = ({ value, onChange, label }: Props) => {
     <label className="flex flex-col mb-4">
       {label}
       <input
-        className="border-2"
+        className="border-2 text-black"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

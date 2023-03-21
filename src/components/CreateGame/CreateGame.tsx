@@ -6,6 +6,7 @@ import { ErrorText } from "@/components/ErrorText/ErrorText"
 import { Card } from "@/components/Card/Card"
 import { Title } from "@/components/Title/Title"
 import { Input } from "@/components/Input/Input"
+import { Game } from "@/types/Game"
 
 export const CreateGame = () => {
   const [username, setUsername] = useState("")
@@ -27,10 +28,7 @@ export const CreateGame = () => {
     }
 
     try {
-      // 1. Save token
-      const { data } = await httpClient.post("/game/create", payload)
-
-      // 2. Redirect to game
+      const { data } = await httpClient.post<Game>("/game/create", payload)
       await router.push(`/game/${data.gameId}`)
     } catch {
       setError("There was an error. Please try again later")
