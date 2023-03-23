@@ -11,6 +11,8 @@ Flow:
 4. Token is saved in Context API
 5. Each request attaches userToken so that backend can validate
 
+// https://francois-steinel.fr/articles/build-lobby-based-online-multiplayer-browser-games-with-react-and-nodejs
+
 ---
 
 - [x] Add move validation

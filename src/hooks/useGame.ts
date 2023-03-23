@@ -1,9 +1,7 @@
 import { Chess, Square } from "chess.js"
-import { useState } from "react"
+import { socket } from "@/services/socket"
 
-export const useGame = () => {
-  const [game, setGame] = useState(new Chess())
-
+export const useGame = (game: any, setGame: any) => {
   const makeMove = (move: any) => {
     const gameCopy = new Chess()
     gameCopy.loadPgn(game.pgn())
@@ -16,6 +14,8 @@ export const useGame = () => {
       result = false
     }
     setGame(gameCopy)
+
+    socket.emit("client.game.move_piece", { game: gameCopy.fen() })
 
     return result
   }

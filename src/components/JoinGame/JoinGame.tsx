@@ -35,10 +35,10 @@ export const JoinGame = () => {
 
     try {
       // 1. Save token
-      const { data } = await httpClient.post("/game/join", payload)
+      // await httpClient.post("/game", payload)
 
       // 2. Redirect to game
-      await router.push(`/game/${data.gameId}`)
+      await router.push(`/game?lobby=${gameId}`)
     } catch {
       setError("There was an error. Please try again later")
     }
