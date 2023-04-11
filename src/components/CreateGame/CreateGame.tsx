@@ -6,8 +6,10 @@ import { Card } from "@/components/Card/Card"
 import { Title } from "@/components/Title/Title"
 import { Input } from "@/components/Input/Input"
 import { socket } from "@/services/socket"
+import { v4 as uuidv4 } from "uuid"
 
 export const CreateGame = () => {
+  const playerId = uuidv4()
   const [username, setUsername] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
@@ -29,7 +31,7 @@ export const CreateGame = () => {
 
     try {
       // const { data } = await httpClient.post<Game>("/game/create", payload)
-      socket.emit("client.lobby.create")
+      socket.emit("client.lobby.create", { playerId, username })
 
       // await router.push(`/game?${data.gameId}`)
     } catch {
@@ -40,6 +42,8 @@ export const CreateGame = () => {
   useEffect(() => {
     const onLobbyState = async (data: any) => {
       router.query.lobby = data.lobbyId
+      router.query.playerId = playerId
+      router.query.username = username
 
       await router.push(
         {

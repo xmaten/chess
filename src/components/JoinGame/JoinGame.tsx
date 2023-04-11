@@ -1,12 +1,11 @@
 import { useState } from "react"
-import { httpClient } from "@/services/httpClient"
 import { useRouter } from "next/router"
+import { v4 as uuidv4 } from "uuid"
 import { Button } from "@/components/Button/Button"
 import { ErrorText } from "@/components/ErrorText/ErrorText"
 import { Card } from "@/components/Card/Card"
 import { Title } from "@/components/Title/Title"
 import { Input } from "@/components/Input/Input"
-
 export const JoinGame = () => {
   const [username, setUsername] = useState("")
   const [gameId, setGameId] = useState("")
@@ -38,7 +37,11 @@ export const JoinGame = () => {
       // await httpClient.post("/game", payload)
 
       // 2. Redirect to game
-      await router.push(`/game?lobby=${gameId}`)
+      await router.push(
+        `/game?lobby=${payload.gameId}&playerId=${uuidv4()}&username=${
+          payload.username
+        }`
+      )
     } catch {
       setError("There was an error. Please try again later")
     }

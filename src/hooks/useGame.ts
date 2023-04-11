@@ -1,7 +1,10 @@
 import { Chess, Square } from "chess.js"
 import { socket } from "@/services/socket"
+import { useState } from "react"
 
 export const useGame = (game: any, setGame: any) => {
+  const [turn, setTurn] = useState("white")
+
   const makeMove = (move: any) => {
     const gameCopy = new Chess()
     gameCopy.loadPgn(game.pgn())
@@ -14,6 +17,13 @@ export const useGame = (game: any, setGame: any) => {
       result = false
     }
     setGame(gameCopy)
+
+    const t = gameCopy.turn()
+    if (t === "b") {
+      setTurn("black")
+    } else {
+      setTurn("white")
+    }
 
     socket.emit("client.game.move_piece", { game: gameCopy.fen() })
 
@@ -75,5 +85,5 @@ export const useGame = (game: any, setGame: any) => {
     }
   }
 
-  return { game, onDrop, onMouseOutSquare, onMouseOverSquare }
+  return { game, onDrop, onMouseOutSquare, onMouseOverSquare, turn }
 }
