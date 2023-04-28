@@ -4,7 +4,7 @@ type Props = {
   type?: "button" | "submit" | "reset"
   disabled?: boolean
   children: ReactNode
-  onClick: () => void
+  onClick?: () => void
 }
 
 export const Button = ({

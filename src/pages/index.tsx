@@ -4,13 +4,14 @@ import { useEffect, useState } from "react"
 import { httpClient } from "@/services/httpClient"
 import { User } from "@/types/User"
 import { Button } from "@/components/Button/Button"
-import { AUTH_TOKEN_KEY } from "@/utils/constants"
+import { AUTH_TOKEN_KEY, USER_DETAILS } from "@/utils/constants"
 
 export default function Home() {
   const [user, setUser] = useState<null | User>(null)
 
   const handleLogout = () => {
     localStorage.removeItem(AUTH_TOKEN_KEY)
+    localStorage.removeItem(USER_DETAILS)
   }
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function Home() {
         const data = await httpClient.get("/auth/profile")
         if (data.data) {
           setUser(data.data)
+          localStorage.setItem(USER_DETAILS, JSON.stringify(data.data))
         }
       } catch {
         setUser(null)

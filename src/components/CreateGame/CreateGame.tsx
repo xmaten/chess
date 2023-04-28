@@ -1,39 +1,25 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { Button } from "@/components/Button/Button"
-import { ErrorText } from "@/components/ErrorText/ErrorText"
 import { Card } from "@/components/Card/Card"
 import { Title } from "@/components/Title/Title"
-import { Input } from "@/components/Input/Input"
 import { socket } from "@/services/socket"
-import { v4 as uuidv4 } from "uuid"
+import { getUser } from "@/utils/getUser"
 
 export const CreateGame = () => {
-  const playerId = uuidv4()
-  const [username, setUsername] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
+  const user = getUser()
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
+  const handleCreate = async () => {
     socket.connect()
 
-    setError("")
-
-    if (!username) {
-      setError("Username is required")
+    if (!user) {
       return
     }
 
-    const payload = {
-      username
-    }
-
     try {
-      // const { data } = await httpClient.post<Game>("/game/create", payload)
-      socket.emit("client.lobby.create", { playerId, username })
-
-      // await router.push(`/game?${data.gameId}`)
+      socket.emit("client.lobby.create", { playerId: user.sub })
     } catch {
       setError("There was an error. Please try again later")
     }
@@ -42,8 +28,6 @@ export const CreateGame = () => {
   useEffect(() => {
     const onLobbyState = async (data: any) => {
       router.query.lobby = data.lobbyId
-      router.query.playerId = playerId
-      router.query.username = username
 
       await router.push(
         {
@@ -64,17 +48,9 @@ export const CreateGame = () => {
   return (
     <Card>
       <Title>Create Chess Game</Title>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col mt-5">
-          <Input value={username} onChange={setUsername} label="Username:" />
-        </div>
-
-        {error && <ErrorText error={error} />}
-
-        <Button disabled={Boolean(error)} type="submit">
-          Create Game
-        </Button>
-      </form>
+      <Button onClick={handleCreate} disabled={Boolean(error)} type="submit">
+        Create Game
+      </Button>
     </Card>
   )
 }

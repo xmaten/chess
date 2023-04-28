@@ -11,7 +11,6 @@ export const Game = () => {
   const [game, setGame] = useState(new Chess())
   const [color, setColor] = useState(null)
 
-  const [username, setUsername] = useState("")
   const { onMouseOverSquare, onMouseOutSquare, onDrop, turn } = useGame(
     game,
     setGame
@@ -19,17 +18,15 @@ export const Game = () => {
 
   useEffect(() => {
     socket.emit("client.lobby.join", {
-      lobbyId: router.query.lobby,
-      playerId: router.query.playerId,
-      username: router.query.username
+      lobbyId: router.query.lobby
     })
   }, [router])
 
   useEffect(() => {
     socket.connect()
     function updateBoard(value: any) {
-      // console.log(value)
       const newBoard = value.board.game
+
       if (game && newBoard) {
         const currentBoard = game.fen()
 
@@ -44,10 +41,6 @@ export const Game = () => {
     const gameMessage = (value: any) => {
       if (!color) {
         setColor(value.color)
-      }
-
-      if (!username) {
-        setUsername(value.username)
       }
     }
 
@@ -68,7 +61,10 @@ export const Game = () => {
       className={
         turn === color ? "pointer-events-auto" : "pointer-events-none"
       }>
-      {username}
+      <div>
+        Game ID: <span>{router.query.lobby}</span>
+      </div>
+
       <Chessboard
         boardWidth={800}
         position={game.fen()}
